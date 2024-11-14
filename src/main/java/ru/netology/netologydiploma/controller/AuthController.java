@@ -20,7 +20,7 @@ public class AuthController {
         return authService.createAuthToken(authRequest);
     }
 
-    @PostMapping
+    @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         log.info("Logout request received");
         return ResponseEntity.ok("Successfully logged out");

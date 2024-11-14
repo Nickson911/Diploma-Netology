@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import ru.netology.netologydiploma.model.FileDetails;
 import ru.netology.netologydiploma.model.PutRequest;
-import ru.netology.netologydiploma.service.StorageService;
+import ru.netology.netologydiploma.service.FileService;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -22,42 +22,42 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CloudStorageControllerTest {
+class FileControllerTest {
     @Mock
-    StorageService storageService;
+    FileService fileService;
     @InjectMocks
-    CloudStorageController cloudStorageController;
+    FileController fileController;
 
     @Test
     void testGetFileList() {
 
         ArrayList<FileDetails> fileDetailsList = new ArrayList<>();
-        when(storageService.getFileList(Mockito.any(), anyInt())).thenReturn(fileDetailsList);
+        when(fileService.getFileList(Mockito.any(), anyInt())).thenReturn(fileDetailsList);
 
-        List<FileDetails> actualFileList = cloudStorageController.getFileList(new UserPrincipal("principal"), 1);
+        List<FileDetails> actualFileList = fileController.getFileList(new UserPrincipal("principal"), 1);
         assertSame(fileDetailsList, actualFileList);
         assertTrue(actualFileList.isEmpty());
-        verify(storageService).getFileList(Mockito.any(), anyInt());
+        verify(fileService).getFileList(Mockito.any(), anyInt());
     }
 
     @Test
     void testSaveFile() throws IOException {
         UserPrincipal principal = new UserPrincipal("Ivan Ivanov");
-        cloudStorageController.saveFile(principal, "file.txt",
+        fileController.saveFile(principal, "file.txt",
                 new MockMultipartFile("Name", new ByteArrayInputStream("Word".getBytes())));
-        verify(storageService).saveFile(Mockito.any(), Mockito.any(), Mockito.any());
+        verify(fileService).saveFile(Mockito.any(), Mockito.any(), Mockito.any());
     }
 
     @Test
     void testGetFile() {
-        cloudStorageController.getFile(new UserPrincipal("Ivan Ivanov"), null);
+        fileController.getFile(new UserPrincipal("Ivan Ivanov"), null);
     }
 
     @Test
     void testRenameFile() {
-        doNothing().when(storageService).renameFile(Mockito.any(), Mockito.any(), Mockito.any());
+        doNothing().when(fileService).renameFile(Mockito.any(), Mockito.any(), Mockito.any());
         UserPrincipal principal = new UserPrincipal("principal");
-        cloudStorageController.renameFile(principal, "file.txt", new PutRequest("file.txt"));
-        verify(storageService).renameFile(Mockito.any(), Mockito.any(), Mockito.any());
+        fileController.renameFile(principal, "file.txt", new PutRequest("file.txt"));
+        verify(fileService).renameFile(Mockito.any(), Mockito.any(), Mockito.any());
     }
 }

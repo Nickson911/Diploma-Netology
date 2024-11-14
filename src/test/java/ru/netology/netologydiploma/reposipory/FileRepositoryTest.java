@@ -19,18 +19,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(classes = {StorageRepository.class})
+@ContextConfiguration(classes = {FileRepository.class})
 @ExtendWith(SpringExtension.class)
-class StorageRepositoryTest {
+class FileRepositoryTest {
     @Autowired
-    private StorageRepository storageRepository;
+    private FileRepository fileRepository;
 
     @Test
     void testSaveFileInvalidDataFileException() {
         try (MockedStatic<Files> mockFiles = mockStatic(Files.class)) {
             mockFiles.when(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)))
                     .thenThrow(new FileException(" "));
-            assertThrows(FileException.class, () -> storageRepository.saveFile("Login", "file.txt",
+            assertThrows(FileException.class, () -> fileRepository.saveFile("Login", "file.txt",
                     new MockMultipartFile("Name", new ByteArrayInputStream("Word".getBytes()))));
             mockFiles.verify(() -> Files.createDirectories(Mockito.<Path>any(), isA(FileAttribute[].class)));
         }
@@ -38,16 +38,16 @@ class StorageRepositoryTest {
 
     @Test
     void testGetFile() {
-        assertThrows(FileException.class, () -> storageRepository.getFile("Login1", "file.txt"));
+        assertThrows(FileException.class, () -> fileRepository.getFile("Login1", "file.txt"));
     }
 
     @Test
     void testRenameFileInvalidData() {
-        assertThrows(FileException.class, () -> storageRepository.renameFile("Login1", "file.txt", "file.txt"));
+        assertThrows(FileException.class, () -> fileRepository.renameFile("Login1", "file.txt", "file.txt"));
     }
 
     @Test
     void testDeleteFile() {
-        assertThrows(FileException.class, () -> storageRepository.deleteFile("Login2", "file.txt"));
+        assertThrows(FileException.class, () -> fileRepository.deleteFile("Login2", "file.txt"));
     }
 }

@@ -18,10 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class StorageRepository {
+public class FileRepository {
     @Value("${cloud.storeDirectory}")
     private String directory;
-    private static final Logger log = Logger.getLogger(StorageRepository.class);
+    private static final Logger log = Logger.getLogger(FileRepository.class);
 
     private String createPath(String login) {
         return directory + File.separator + login;

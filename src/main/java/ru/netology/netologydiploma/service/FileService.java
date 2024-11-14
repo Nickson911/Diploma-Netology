@@ -12,9 +12,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class StorageService {
+public class FileService {
     private final FileRepository fileRepository;
-    private static final Logger log = Logger.getLogger(StorageService.class);
+    private static final Logger log = Logger.getLogger(FileService.class);
 
     private void checkFileName(String fileName) {
         if (fileName == null) {
